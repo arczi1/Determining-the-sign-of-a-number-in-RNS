@@ -5,13 +5,13 @@
 class RNSNumber
 {
 public:
-    RNSNumber(int number, std::vector<int> moduli);
-    RNSNumber(std::vector<int> residues, std::vector<int> moduli);
+    RNSNumber(int number, std::vector<int> base);
+    RNSNumber(std::vector<int> residues, std::vector<int> base);
 
     std::vector<int> getResidues();
-    std::vector<int> getModuli();
+    std::vector<int> getBase();
 
 private:
     std::vector<int> residues;
-    std::vector<int> moduli;
+    std::vector<int> base;
 };
