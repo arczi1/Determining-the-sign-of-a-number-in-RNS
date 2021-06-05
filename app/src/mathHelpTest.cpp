@@ -7,15 +7,15 @@
 const std::string testGroup{ "Math help Test" };
 
 TEST_CASE("Modulo is calculated properly", testGroup) {
-    REQUIRE(modulo(12, 5) == 2);
-    REQUIRE(modulo(13, 4) == 1);
-    REQUIRE(modulo(12, 4) == 0);
-    REQUIRE(modulo(12, 7) == 5);
+    REQUIRE(MathHelp::modulo(12, 5) == 2);
+    REQUIRE(MathHelp::modulo(13, 4) == 1);
+    REQUIRE(MathHelp::modulo(12, 4) == 0);
+    REQUIRE(MathHelp::modulo(12, 7) == 5);
 }
 
 TEST_CASE("Tensor product of modulos is calculated properly", testGroup) {
-    REQUIRE(tensorProduct(5, 4, 3) == 2);
-    REQUIRE(tensorProduct(2, 3, 7) == 6);
+    REQUIRE(MathHelp::tensorProduct(5, 4, 3) == 2);
+    REQUIRE(MathHelp::tensorProduct(2, 3, 7) == 6);
 }
 
 TEST_CASE("Tensor product of rns numbers is calculated properly", testGroup) {
@@ -25,27 +25,28 @@ TEST_CASE("Tensor product of rns numbers is calculated properly", testGroup) {
     RNSNumber sut1{ residues1, base };
     RNSNumber sut2{ residues2, base };
 
-    REQUIRE(tensorProduct(sut1, sut2).getResidues() == std::vector<int>{7, 6, 0, 0});
+    REQUIRE(MathHelp::tensorProduct(sut1, sut2).getResidues() == std::vector<int>{7, 6, 0, 0});
 }
 
 TEST_CASE("Multiplication of wideOneMatrixes (first horizontal, second vertical) is calculated properly", testGroup) {
-    WideOneMatrix first{std::vector<int>{1, 2, 3}, WideOneMatrix::Direction::horizontal};
-    WideOneMatrix second{std::vector<int>{3, 2, 1}, WideOneMatrix::Direction::vertical};
+    MathHelp::WideOneMatrix first{std::vector<int>{1, 2, 3}, MathHelp::WideOneMatrix::Direction::horizontal};
+    MathHelp::WideOneMatrix second{std::vector<int>{3, 2, 1}, MathHelp::WideOneMatrix::Direction::vertical};
 
-    REQUIRE(multiplication(first, second) == 10);
+    REQUIRE(MathHelp::multiplication(first, second) == 10);
 }
 
 TEST_CASE("Transpose of wideOneMatrixes", testGroup) {
-    WideOneMatrix sut{std::vector<int>{1, 2, 3}, WideOneMatrix::Direction::horizontal};
-    WideOneMatrix sutAfterTranspose = transpose(sut);
-    REQUIRE(sutAfterTranspose.direction == WideOneMatrix::Direction::vertical);
+    MathHelp::WideOneMatrix sut{std::vector<int>{1, 2, 3}, MathHelp::WideOneMatrix::Direction::horizontal};
+    MathHelp::WideOneMatrix sutAfterTranspose = MathHelp::transpose(sut);
+    REQUIRE(sutAfterTranspose.direction == MathHelp::WideOneMatrix::Direction::vertical);
 }
 
 TEST_CASE("XOR of two bits", testGroup) {
     bool one{true};
     bool zero{false};
-    REQUIRE(XOR(zero, zero) == zero);
-    REQUIRE(XOR(zero, one) == one);
-    REQUIRE(XOR(one, zero) == one);
-    REQUIRE(XOR(one, one) == zero);
+    REQUIRE(MathHelp::XOR(zero, zero) == zero);
+    REQUIRE(MathHelp::XOR(zero, one) == one);
+    REQUIRE(MathHelp::XOR(one, zero) == one);
+    REQUIRE(MathHelp::XOR(one, one) == zero);
 }
+
