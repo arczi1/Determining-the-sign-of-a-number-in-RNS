@@ -3,53 +3,48 @@
 #include "rnsNumber.hpp"
 #include "mathHelp.hpp"
 
-enum class Sign {
-    Plus,
-    Minus
-};
+int determineSignUsignSDRT(RNSNumber x) {   
+    const RNSNumber W = MathHelp::countW(x.getBase());
+    int numberOfElements = x.getResidues().size();
+    
+    //0
+    MathHelp::WideOneMatrix E {
+        .numbers = MathHelp::tensorProduct(x, W).getResidues(),
+        .direction = MathHelp::WideOneMatrix::Direction::vertical
+    };
 
-int determineSignUsignSDRT(RNSNumber x) {
-    int sign = 1;
+    //1
+    MathHelp::WideOneMatrix onesHorizontal {
+        .numbers = std::vector<int>(numberOfElements, 1),
+        .direction = MathHelp::WideOneMatrix::Direction::horizontal
+    };
+    int h1 = MathHelp::multiplication(onesHorizontal, E);
+
+    //2
+    int w = 4;    
+    int twoToThePowerOfW = static_cast<int>(pow(2, w));
+    std::vector<int> us;
+    for (int i = 0; i < numberOfElements; i++)
+    {
+        us.push_back(twoToThePowerOfW - x.getBase().at(i));
+    }
+    MathHelp::WideOneMatrix usHorizontal{
+        .numbers = us,
+        .direction = MathHelp::WideOneMatrix::Direction::horizontal
+    };
+    int h2 = MathHelp::multiplication(usHorizontal, E);
+    
+    //3
     int tail = 0;
     int h3{};
     int body{};
     int tmp{};
     int carry{};
     int sum{};
-    constexpr int bitsInByte = 8;
-    int w = sizeof(int) * bitsInByte; // tutaj prawdopodobnie ilosc bitow w int;
-                                      // w podobno mialo byc dlugoscia slowa, ale czym jest slowo xD
-    const RNSNumber W{MathHelp::countW(x.getBase())};
-    
-    //0
-    MathHelp::WideOneMatrix E{};
-    E.numbers = MathHelp::tensorProduct(x, W).getResidues();
-    E.direction = MathHelp::WideOneMatrix::Direction::vertical;
-
-    //1
-    std::vector<int> ones;
-    for (int i = 0; i < E.numbers.size(); i++)
-    {
-        ones.push_back(1);
-    }
-    MathHelp::WideOneMatrix onesHorizontal{};
-    onesHorizontal.numbers = ones;
-    onesHorizontal.direction = MathHelp::WideOneMatrix::Direction::horizontal;
-    int h1 = MathHelp::multiplication(onesHorizontal, E);
-
-    //2
-    std::vector<int> us;
-    for (int i = 0; i < x.getBase().size(); i++)
-    {
-        us.push_back(pow(2, w) - x.getBase().at(i));
-    }
-    MathHelp::WideOneMatrix usHorizontal{};
-    usHorizontal.numbers = us;
-    usHorizontal.direction = MathHelp::WideOneMatrix::Direction::horizontal;
-    int h2 = MathHelp::multiplication(usHorizontal, E);
-    
-    //3
-    for(int k = 3; /*k != n + 3*/ ;) {
+    int sign = 1;
+    int n = 3;
+    int d = n + 3;
+    for(int k = 3; k < d; k++) { 
         //4
         h1 = h2;
         
@@ -68,30 +63,31 @@ int determineSignUsignSDRT(RNSNumber x) {
             //9
             tail = MathHelp::modulo(body, 2);
             //10
-            int sum = MathHelp::modulo(body, pow(2, w));
+            int sum = MathHelp::modulo(body, twoToThePowerOfW);
             //11
             sign = sum >> (w - 1);
             //12, 13, 14
-            if(MathHelp::modulo(sum, pow(2, w-1)) != (pow(2, w-2) - 1)) return sign;
+            if((MathHelp::modulo(sum, pow(2, w-1)) >> 1) != (pow(2, w-2) - 1)) return sign;
         }
         //15
         else {
             //16
-            body = MathHelp::modulo(h1, pow(2, w)) + MathHelp::modulo(h2 >> w, pow(2, w)) + MathHelp::modulo(h3 >> (2*w), pow(2, w));
+            body = MathHelp::modulo(h1, twoToThePowerOfW) + MathHelp::modulo(h2 >> w, twoToThePowerOfW) + MathHelp::modulo(h3 >> (2*w), twoToThePowerOfW);
             //17
-            tmp = ((body + static_cast<int>(tail * pow(2, w))) >> 1);
+            tmp = ((body + static_cast<int>(tail * twoToThePowerOfW)) >> 1);
             //18
             tail = MathHelp::modulo(body, 2);
             //19
             carry = (tmp >> w);
             //20
-            sum = MathHelp::modulo(tmp, pow(2,w));
+            sum = MathHelp::modulo(tmp, twoToThePowerOfW);
             //21, 22, 23, 24
-            if(carry == 1 || sum != (pow(2, w) - 1)) {
-                sign = sign xor carry;
+            if(carry == 1 || sum != (twoToThePowerOfW - 1)) {
+                sign = sign ^ carry; // sign moze byc 1 albo 0, tak samo carry
                 return sign;
             }
         } 
     }
+    //27
     return sign;
 }

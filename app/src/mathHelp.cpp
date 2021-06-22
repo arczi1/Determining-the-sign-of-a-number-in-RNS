@@ -65,20 +65,9 @@ RNSNumber countW(std::vector<int> base) {
     std::vector<int> residues;
     for (int i = 0; i < base.size(); i++)
     {
-        residues.push_back(MathHelp::modulo(1/(M/base.at(i)), base.at(i)));
+        residues.push_back(MathHelp::modulo(base.at(i)/M, base.at(i)));
     }
     return RNSNumber{ residues, base };
-}
-
-std::vector<int> generateHVec(int k, int w) {
-    return {};
-}
-
-int generateHElement(int k, int w, RNSNumber x) {
-    if(k == 1) return 1;
-    if(k == 2) return pow(2, w) - x.getBase().at(k); // s is close to 2^w/2, so h_i(2) = u_i holds with a very high probability
-    //int hi = ((1/x.getBase().at(k)) - (generateHElement(k - 1, w, x) * (1 / pow(2, /*j**/w)))) * pow(2, w * k);
-    return 0;
 }
 
 }
