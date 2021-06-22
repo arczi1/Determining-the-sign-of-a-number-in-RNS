@@ -58,16 +58,36 @@ bool XOR(bool first, bool second) {
 
 RNSNumber countW(std::vector<int> base) {
     int M = 1;
-    for (int i = 0; i < base.size(); i++)
-    {
+    for (int i = 0; i < base.size(); i++) {
         M *= base.at(i);
     }
-    std::vector<int> residues;
-    for (int i = 0; i < base.size(); i++)
-    {
-        residues.push_back(MathHelp::modulo(base.at(i)/M, base.at(i)));
+
+    std::vector<int> M_i;
+    for (int i = 0; i < base.size(); i++) {
+        M_i.push_back(M/base.at(i));
+    }
+
+    std::vector<int> residues(base.size(), 0);
+    for (int i = 0; i < base.size(); i++) {
+        for (int k = 0; k < base.at(i); k++) {
+            if (M_i.at(i) * k % base.at(i) == 1) {
+				residues[i] = k;
+				break;
+			}
+        }
     }
     return RNSNumber{ residues, base };
+}
+
+std::vector<int> generateReciprocalTable(int m_i, int w, int len) {
+    std::vector<int> reciprocalTable;
+	double reciprocalOfModulus = 1.0 / m_i;
+	int w_pow = pow(2, w);
+	for (int i = 0; i < len; i++) {
+        reciprocalOfModulus *= w_pow;
+        reciprocalTable.push_back((int)reciprocalOfModulus % w_pow);
+	}
+	return reciprocalTable;
 }
 
 }

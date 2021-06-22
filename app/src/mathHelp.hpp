@@ -23,8 +23,5 @@ int multiplication(WideOneMatrix first, WideOneMatrix second);
 WideOneMatrix transpose(WideOneMatrix matrix);
 bool XOR(bool first, bool second);
 RNSNumber countW(std::vector<int> base);
-
-std::vector<int> generateHVec(int k, int w);
-int generateHElement(int k, int w);
-
+std::vector<int> generateReciprocalTable(int m_i, int w, int len);
 }

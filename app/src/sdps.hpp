@@ -4,16 +4,9 @@
 #include "mathHelp.hpp"
 #include <math.h>
 
-enum class Sign {
-    Plus,
-    Minus
-};
-
 int determineSignUsignSDPS(RNSNumber x) {
-    int sign = 1;
+    int sign = 0;
     int tail = 0;
-    int gx_k{};
-    int low{};
     int high{};
     int carry{};
     int sum{};
@@ -27,7 +20,7 @@ int determineSignUsignSDPS(RNSNumber x) {
     E.direction = MathHelp::WideOneMatrix::Direction::vertical;
 
     //1
-      std::vector<int> ones;
+    std::vector<int> ones;
     for (int i = 0; i < E.numbers.size(); i++)
     {
         ones.push_back(1);
@@ -35,25 +28,26 @@ int determineSignUsignSDPS(RNSNumber x) {
     MathHelp::WideOneMatrix onesHorizontal{};
     onesHorizontal.numbers = ones;
     onesHorizontal.direction = MathHelp::WideOneMatrix::Direction::horizontal;
-    gx_k = MathHelp::multiplication(onesHorizontal, E);
+    int gx_k = MathHelp::multiplication(onesHorizontal, E);
 
     //2
     // low <- <gx_k>_(2^w)
-    low = MathHelp::modulo(gx_k, pow(2, w));
+    int low = MathHelp::modulo(gx_k, pow(2, w));
     //3
     //sign <- low>>(w-1)
-    sign = low >> (w-1); 
+    sign = (low >> (w-1)); 
     //4
     if(sign == 0) {
         low += pow(2, w-1); 
     }
     //5
-    for(int k=1; /* k != n; k++*/;) {
+    int n = x.getResidues().size();
+    for(int k=1; k < n; k++) {
         //6
         //u is an integer in range 0<=u<=2^[w/2]
         std::vector<int> ui;
         for (int i = 0; i < x.getBase().size(); i++) {
-            ui.push_back(pow(2, w) - x.getBase().at(i));
+            ui.push_back(pow(pow(2, w) - x.getBase().at(i), k));
         }
         MathHelp::WideOneMatrix usHorizontal{};
         usHorizontal.numbers = ui;
@@ -70,12 +64,12 @@ int determineSignUsignSDPS(RNSNumber x) {
         carry = z >> w;
         //11
         if((carry == 1) || (sum != (pow(2, w)-1))) {
-            sign = sign xor carry; //12
-            return sign;           //13
+            //12, 13
+            return MathHelp::XOR(sign, carry);
         }
         //15
         low = MathHelp::modulo(gx_k, pow(2, w));       
     }
       
-    return sign;
+    return 1;
 }
