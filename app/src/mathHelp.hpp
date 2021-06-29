@@ -23,5 +23,5 @@ int multiplication(WideOneMatrix first, WideOneMatrix second);
 WideOneMatrix transpose(WideOneMatrix matrix);
 bool XOR(bool first, bool second);
 RNSNumber countW(std::vector<int> base);
-std::vector<int> generateReciprocalTable(int m_i, int w, int len);
+std::vector<int> generateReciprocalTable(int m_i, int w, int numberOfElements);
 }

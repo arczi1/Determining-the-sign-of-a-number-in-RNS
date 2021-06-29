@@ -50,3 +50,10 @@ TEST_CASE("XOR of two bits", testGroup) {
     REQUIRE(MathHelp::XOR(one, one) == zero);
 }
 
+TEST_CASE("W constant calculation", testGroup){
+    std::vector<int> base = {16, 15, 13};
+    std::vector<int> residues = {11,  7, 11};
+
+    REQUIRE(MathHelp::countW(base).getBase()==base);
+    REQUIRE(MathHelp::countW(base).getResidues()==residues);
+}

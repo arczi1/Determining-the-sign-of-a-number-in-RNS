@@ -10,8 +10,7 @@ int determineSignUsignSDPS(RNSNumber x) {
     int high{};
     int carry{};
     int sum{};
-    constexpr int bitsInByte = 8;
-    int w = sizeof(int) * bitsInByte; 
+    int w = 8; 
     const RNSNumber W{MathHelp::countW(x.getBase())};
     
     //0
@@ -42,7 +41,7 @@ int determineSignUsignSDPS(RNSNumber x) {
     }
     //5
     int n = x.getResidues().size();
-    for(int k=1; k < n; k++) {
+    for(int k=1; k <= n; k++) {
         //6
         //u is an integer in range 0<=u<=2^[w/2]
         std::vector<int> ui;
@@ -71,5 +70,5 @@ int determineSignUsignSDPS(RNSNumber x) {
         low = MathHelp::modulo(gx_k, pow(2, w));       
     }
       
-    return 1;
+    return sign;
 }

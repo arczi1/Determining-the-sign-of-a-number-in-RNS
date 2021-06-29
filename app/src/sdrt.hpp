@@ -42,7 +42,7 @@ int determineSignUsignSDRT(RNSNumber x) {
     int sign = 0;
     int d = numberOfElements + 3;
     int twoToThePowerOfW = static_cast<int>(pow(2, w));
-    for(int k = 3; k < d; k++) { 
+    for(int k = 3; k <= d; k++) { 
         //4, 5
         h1 = h2;
         h2 = h3;
@@ -85,5 +85,5 @@ int determineSignUsignSDRT(RNSNumber x) {
         } 
     }
     //27
-    return 1;
+    return sign;
 }

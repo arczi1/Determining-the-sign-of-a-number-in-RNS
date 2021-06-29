@@ -79,11 +79,11 @@ RNSNumber countW(std::vector<int> base) {
     return RNSNumber{ residues, base };
 }
 
-std::vector<int> generateReciprocalTable(int m_i, int w, int len) {
+std::vector<int> generateReciprocalTable(int m_i, int w, int numberOfElements) {
     std::vector<int> reciprocalTable;
 	double reciprocalOfModulus = 1.0 / m_i;
 	int w_pow = pow(2, w);
-	for (int i = 0; i < len; i++) {
+	for (int i = 0; i < numberOfElements; i++) {
         reciprocalOfModulus *= w_pow;
         reciprocalTable.push_back((int)reciprocalOfModulus % w_pow);
 	}
